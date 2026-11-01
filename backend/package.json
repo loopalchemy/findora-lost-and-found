@@ -1,0 +1,35 @@
+{
+  "name": "university-lost-and-found-backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "packageManager": "npm@10.9.2",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test tests/*.test.js",
+    "db:check": "node scripts/check-db.js",
+    "admin:create": "node scripts/create-admin.js",
+    "account:create-staff": "node scripts/create-staff.js",
+    "account:reset-password": "node scripts/reset-password.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.9",
+    "express": "^5.3.0",
+    "express-rate-limit": "^8.1.0",
+    "file-type": "^21.1.1",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.0.2",
+    "mysql2": "^3.24.6"
+  },
+  "devDependencies": {
+    "supertest": "^7.1.4"
+  }
+}

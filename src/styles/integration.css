@@ -1,0 +1,15 @@
+.browse-result-message {
+  margin: 14px 0;
+  padding: 12px 15px;
+  border: 1px solid #dce6df;
+  border-radius: 12px;
+  background: #f4f7f3;
+  color: #405b53;
+  font-size: 0.9rem;
+}
+
+.browse-result-message--error {
+  border-color: #f0d5d0;
+  background: #fff4f1;
+  color: #8b3832;
+}
