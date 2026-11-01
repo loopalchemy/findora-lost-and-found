@@ -83,5 +83,5 @@ The current run passed: **3/3 frontend tests**, **8/8 backend tests**, and the V
 - Uploaded images are size/type checked and written under the configured local upload directory. This local disk setup is not durable object storage; production retention and backup policy remain to be designed.
 
 ## Project boundaries and next verification
-
+Production frontend configuration updated.
 Before describing the application as fully database-integrated, verify this source against an isolated, disposable MySQL 8 database: inspect the exact schema, create a test account, exercise allowed/denied API actions, confirm row persistence and status changes, and document cleanup. Do not use the shared/production university database for this test. Also run broader responsive/browser accessibility review, image upload success/failure cases, backup/restore exercises and an independent security review before any real-user deployment.
