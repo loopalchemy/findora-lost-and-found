@@ -3,10 +3,7 @@
 -- Existing databases are not modified by CREATE ... IF NOT EXISTS. Do not drop
 -- or recreate an existing database. Review actual DDL before using on an existing DB.
 
-CREATE DATABASE IF NOT EXISTS university_lost_found
-  CHARACTER SET utf8mb4
-  COLLATE utf8mb4_unicode_ci;
-USE university_lost_found;
+USE findora;
 
 CREATE TABLE IF NOT EXISTS users (
   user_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
