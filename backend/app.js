@@ -335,7 +335,7 @@ function createApp({ pool, config = configFromEnv(), uploadDir = config.uploadDi
       const requestedLimit = Number(req.query.limit) || 200;
       const limit = Math.min(Math.max(Number.isSafeInteger(requestedLimit) ? requestedLimit : 200, 1), 500);
       const whereSql = where.length ? `WHERE ${where.join(' AND ')}` : '';
-      const [rows] = await pool.execute(`${reportSelect()} ${whereSql} ORDER BY ${order} LIMIT ?`, [...params, limit]);
+      const [rows] = await pool.execute(`${reportSelect()} ${whereSql} ORDER BY ${order} LIMIT ${limit}`, params);
       return res.json({ success: true, count: rows.length, reports: rows.map((row) => mapReport(row, req.user, canViewAll)) });
     } catch (error) { return next(error); }
   });
