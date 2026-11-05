@@ -2,6 +2,7 @@
 const mysql = require('mysql2/promise');
 const path = require('node:path');
 const fs = require('node:fs');
+const { resolveDatabaseName } = require('./database/names');
 
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 
@@ -24,7 +25,7 @@ function createPool(env = process.env) {
     port,
     user: env.DB_USER,
     password: env.DB_PASSWORD,
-    database: env.DB_NAME || 'university_lost_found',
+    database: resolveDatabaseName(env),
     ssl,
     waitForConnections: true,
     connectionLimit: 10,
