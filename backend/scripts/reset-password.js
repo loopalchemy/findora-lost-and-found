@@ -2,6 +2,7 @@ require('dotenv').config({ path: require('node:path').join(__dirname, '..', '.en
 const bcrypt = require('bcryptjs');
 const pool = require('../db');
 const { validPassword, isEmail } = require('../src/validation');
+const { PRODUCTION_DATABASE_NAME } = require('../database/names');
 
 function prompt(label, hidden = false) {
   return new Promise((resolve, reject) => {
@@ -47,12 +48,12 @@ async function main() {
     if (!isEmail(email)) throw new Error('Enter a valid account email address.');
     if (!validPassword(password)) throw new Error('Use 12–128 characters with uppercase, lowercase and a number.');
     if (password !== confirmation) throw new Error('Passwords do not match.');
-    if (process.env.DB_NAME !== 'university_lost_found') throw new Error('DB_NAME must be university_lost_found. No data was changed.');
+    if (process.env.DB_NAME !== PRODUCTION_DATABASE_NAME) throw new Error(`DB_NAME must be ${PRODUCTION_DATABASE_NAME}. No data was changed.`);
 
     const passwordHash = await bcrypt.hash(password, 12);
     connection = await pool.getConnection();
     const [identity] = await connection.query('SELECT DATABASE() AS databaseName');
-    if (identity[0]?.databaseName !== 'university_lost_found') throw new Error('Connected database did not match the expected name. No data was changed.');
+    if (identity[0]?.databaseName !== PRODUCTION_DATABASE_NAME) throw new Error('Connected database did not match the expected name. No data was changed.');
 
     await connection.beginTransaction();
     transactionStarted = true;

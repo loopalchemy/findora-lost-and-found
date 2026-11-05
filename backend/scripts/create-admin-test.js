@@ -2,6 +2,7 @@ require('dotenv').config({ path: require('node:path').join(__dirname, '..', '.en
 const bcrypt = require('bcryptjs');
 const pool = require('../db');
 const { validPassword, isEmail } = require('../src/validation');
+const { TEST_DATABASE_NAME, firstAdminLockName } = require('../database/names');
 
 function prompt(label, hidden = false) {
   return new Promise((resolve, reject) => {
@@ -41,6 +42,7 @@ async function main() {
   let connection;
   let lockAcquired = false;
   let transactionStarted = false;
+  const lockName = firstAdminLockName(TEST_DATABASE_NAME);
   try {
     const fullName = (await prompt('Administrator full name: ')).trim();
     const email = (await prompt('Administrator email: ')).trim().toLowerCase();
@@ -50,13 +52,13 @@ async function main() {
     if (!isEmail(email)) throw new Error('Enter a valid email address.');
     if (!validPassword(password)) throw new Error('Use 12–128 characters with uppercase, lowercase and a number.');
     if (password !== confirmation) throw new Error('Passwords do not match.');
-    if (process.env.DB_NAME !== 'university_lost_found_test') throw new Error('DB_NAME must be university_lost_found_test. No data was changed.');
+    if (process.env.DB_NAME !== TEST_DATABASE_NAME) throw new Error(`DB_NAME must be ${TEST_DATABASE_NAME}. No data was changed.`);
 
     const passwordHash = await bcrypt.hash(password, 12);
     connection = await pool.getConnection();
     const [dbRows] = await connection.query('SELECT DATABASE() AS databaseName');
-    if (dbRows[0]?.databaseName !== 'university_lost_found_test') throw new Error('Connected database did not match the expected name. No data was changed.');
-    const [lockRows] = await connection.query('SELECT GET_LOCK(?, 10) AS acquired', ['university_lost_found_test_first_admin']);
+    if (dbRows[0]?.databaseName !== TEST_DATABASE_NAME) throw new Error('Connected database did not match the expected name. No data was changed.');
+    const [lockRows] = await connection.query('SELECT GET_LOCK(?, 10) AS acquired', [lockName]);
     lockAcquired = Number(lockRows[0]?.acquired) === 1;
     if (!lockAcquired) throw new Error('Could not acquire the administrator bootstrap lock.');
 

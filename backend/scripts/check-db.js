@@ -1,15 +1,16 @@
 require('dotenv').config({ path: require('node:path').join(__dirname, '..', '.env') });
 const pool = require('../db');
+const { PRODUCTION_DATABASE_NAME } = require('../database/names');
 
 const expected = ['users', 'categories', 'items', 'claims'];
 
 async function main() {
   try {
     const [identity] = await pool.query('SELECT DATABASE() AS databaseName, VERSION() AS mysqlVersion');
-    if (identity[0]?.databaseName !== 'university_lost_found') {
-      throw new Error('The connection is not using the expected university_lost_found database.');
+    if (identity[0]?.databaseName !== PRODUCTION_DATABASE_NAME) {
+      throw new Error(`The connection is not using the expected ${PRODUCTION_DATABASE_NAME} database.`);
     }
-    console.log(`Read-only connection verified: MySQL ${identity[0].mysqlVersion}; database university_lost_found.`);
+    console.log(`Read-only connection verified: MySQL ${identity[0].mysqlVersion}; database ${PRODUCTION_DATABASE_NAME}.`);
     const [tables] = await pool.query('SHOW TABLES');
     const tableName = Object.keys(tables[0] || {})[0];
     const found = new Set(tables.map((row) => row[tableName]));
